@@ -72,7 +72,6 @@ const GamePlay = ((board) => {
 
         changeTurns();
         declareWinner();
-
     }
 
     let changeTurns = () => {
@@ -132,7 +131,7 @@ const GamePlay = ((board) => {
     };
 
     let compareTiles = (ta, tb, tc) => {
-        return _board.getTile(ta) === _board.getTile(tb) && _board.getTile(ta) === _board.getTile(tb)
+        return _board.getTile(ta) === _board.getTile(tb) && _board.getTile(ta) === _board.getTile(tc)
     };
 
     let changeWinningTiles = (ta, tb, tc) => {
