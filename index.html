@@ -5,21 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+
     <title>TicTacToe</title>
 </head>
 <body>
     <div id="game-container">
         <div id="board">
         </div>
-        <p id="results"></p>
+        <div id="results"></div>
         <button id="restart">Restart</button>
         <div id="player-x" class="player">
-            <p class="player-mark">x</p>
-            <p id="player-x-name" class="player-name my-turn" contenteditable="true">player x</p>
+            <div class="player-mark">x</div>
+            <div id="player-x-name" class="player-name my-turn" contenteditable="true">player x</div>
         </div>
         <div id="player-o" class="player">
-            <p class="player-mark">o</p>
-            <p id="player-o-name" class="player-name" contenteditable="true">player o</p>
+            <div class="player-mark">o</div>
+            <div id="player-o-name" class="player-name" contenteditable="true">player o</div>
         </div>
     </div>
 </body>

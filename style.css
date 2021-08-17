@@ -16,7 +16,7 @@ body {
 #game-container{
     display: grid;
     justify-content: center;
-    grid-template-rows: 500px 100px 200px;
+    grid-template-rows: 500px 100px 150px;
     grid-template-columns: repeat(4, 112.5px);
 }
 
@@ -61,7 +61,7 @@ body {
 
 .player-mark{
     color: var(--player-mark);
-    font-size: 25px;
+    font-size: 35px;
     padding-top: 40px;
 }
 
@@ -71,9 +71,11 @@ body {
 
 #results{
     grid-column: span 3;
-    font-size: 100%;
+    font-size: 200%;
     justify-self: center;
     align-self: end;
+    color: rgb(166, 249, 252);
+    font-family: 'Russo One', sans-serif;
 }
 
 #restart{
