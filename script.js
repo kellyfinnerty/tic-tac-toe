@@ -166,14 +166,30 @@ const DisplayController = (() => {
         _names.forEach(name => name.addEventListener("input", (e) => {
             var nameHTML = e.target;
             var newName = nameHTML.textContent;
-            nameHTML.textContent = newName;
-
-            //e.target.textContent = e.target.textContent;
-    
-            // get if X or O
-            var mark = nameHTML.id.slice(7, 8);
-            (mark === 'x') ? playerX.changeName(newName) : playerO.changeName(newName);
+            var player = _whichPlayer(nameHTML.id);
+            
+            _changePlayerName(player, nameHTML, newName);
         }));
+
+        document.addEventListener("click", (e) => {
+            _names.forEach(name => {
+                var nameTxt = name.textContent;
+                var player = _whichPlayer(name.id);
+                var newName = (nameTxt.length > 0) ? nameTxt : `player ${player.getMark()}`;
+
+                _changePlayerName(player, name, newName);
+            })
+        })
+    }
+
+    let _whichPlayer = (nameID) => {
+        var mark = nameID.slice(7, 8); 
+        return (mark === 'x') ? playerX : playerO;
+    }
+
+    let _changePlayerName = (player, nameHTML, newName) => {
+        player.changeName(newName);
+        nameHTML.textContent = newName;
     }
 
     let _makeRestartEL = () => {
