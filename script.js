@@ -16,6 +16,7 @@ const Board = (() => {
 
     let getTile = (index) => { return _tiles[index] }; 
     let isEmpty = (index) => { return (typeof _tiles[index] === "undefined") ? true : false};
+    let isFull = () => { return (_emptyTiles === 0) ? true : false }
 
     let updateTile = (index, value) => { 
         if (!isEmpty(index)) return false
@@ -33,7 +34,7 @@ const Board = (() => {
         _emptyTiles = 9;
     };
 
-    return { updateTile, getTile, isEmpty, clearBoard }
+    return { updateTile, getTile, isFull, clearBoard }
 })();
 
 const Player = (name, mark, turn) => {
@@ -53,13 +54,15 @@ const Player = (name, mark, turn) => {
     return { getMark, isMyTurn, changeTurn, changeName, getName };
 };
 
+let playerX = Player("Player 1", "x", true);
+let playerO = Player("Player 2", "o", false);
 
 // This is a module pattern
-const GamePlay = ((board) => {
+const GamePlay = ((board, playerX, playerO) => {
     // This is a factory pattern
 
-    let _playerX = Player("Player 1", "x", true);
-    let _playerO = Player("Player 2", "o", false);
+    let _playerX = playerX;
+    let _playerO = playerO;
     let _board = board;
 
     let playTile = function (event){
@@ -95,17 +98,18 @@ const GamePlay = ((board) => {
             result.textContent = 'Game over. You tied!';
         } else {
             var winningPlayer = (winner === 'x') ? _playerX : _playerO;
-            result.textContent = `${winningPlayer.getName()} won!!`;
+            result.textContent = `${winningPlayer.getName()}, you won! Congratulations!!`;
         }
     }
 
     //returns the x or o that won, o.w. returns ''
     let checkForWinner = () => {
         for(var i = 0; i < 3; i++){
+
             var across = i * 3;
             if(typeof _board.getTile(across) !== 'undefined' && compareTiles(across, across+1, across+2)){
                 changeWinningTiles(across, across+1, across+2);
-                return _board.getTile(accross)
+                return _board.getTile(across)
             }
 
             // down
@@ -120,12 +124,13 @@ const GamePlay = ((board) => {
             changeWinningTiles(0, 4, 8);
             return _board.getTile(4)
         } 
+
         if (typeof _board.getTile(4) !== 'undefined' && compareTiles(2, 4, 6)){
             changeWinningTiles(2, 4, 6);
             return _board.getTile(4)
         }
 
-        if (!_board.isEmpty()) return 'tie'
+        if (_board.isFull()) return 'tie'
 
         return ''
     };
@@ -146,7 +151,27 @@ const GamePlay = ((board) => {
 
     return { playTile }
 
-})(Board);
+})(Board, playerX, playerO);
+
+(function addNameEditEventListeners(){
+    let names = Array.from(document.querySelectorAll('.player-name'));
+    names.forEach(name => name.addEventListener("input", (e) => {
+        var nameHTML = e.target;
+        var newName = nameHTML.textContent;
+        nameHTML.textContent = newName;
+
+        // get if X or O
+        var mark = nameHTML.id.slice(7, 8);
+        (mark === 'x') ? playerX.changeName(newName) : playerO.changeName(newName);
+        var test = playerX.getName();
+        var test2 = playerO.getName();
+    }));
+    
+})();
+
+function f () {
+    
+}
 
 //add event listeners to tiles
 (function addTileEventListeners(){
