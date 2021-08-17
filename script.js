@@ -1,13 +1,4 @@
-(function createHTMLBoard () {
-    var board = document.querySelector('#board');
 
-    for(var i = 0; i < 9; i++){
-        var tile = document.createElement('div');
-        tile.classList.add('tile');
-        tile.id = `tile-${i}`;
-        board.appendChild(tile);
-    } 
-})();
 
 // This uses the module pattern
 const Board = (() => {
@@ -58,7 +49,7 @@ let playerX = Player("Player 1", "x", true);
 let playerO = Player("Player 2", "o", false);
 
 // This is a module pattern
-const GamePlay = ((board, playerX, playerO) => {
+const GameController = ((board, playerX, playerO) => {
     // This is a factory pattern
 
     let _playerX = playerX;
@@ -95,10 +86,10 @@ const GamePlay = ((board, playerX, playerO) => {
 
         var result = document.querySelector('#results');
         if (winner === 'tie'){
-            result.textContent = 'Game over. You tied!';
+            result.textContent = 'It\'s a tie'.toUpperCase();
         } else {
             var winningPlayer = (winner === 'x') ? _playerX : _playerO;
-            result.textContent = `${winningPlayer.getName()}, you won! Congratulations!!`;
+            result.textContent = `${winningPlayer.getName()} wins`.toUpperCase();
         }
     }
 
@@ -153,49 +144,61 @@ const GamePlay = ((board, playerX, playerO) => {
 
 })(Board, playerX, playerO);
 
-(function addNameEditEventListeners(){
-    let names = Array.from(document.querySelectorAll('.player-name'));
-    names.forEach(name => name.addEventListener("input", (e) => {
-        var nameHTML = e.target;
-        var newName = nameHTML.textContent;
-        nameHTML.textContent = newName;
 
-        // get if X or O
-        var mark = nameHTML.id.slice(7, 8);
-        (mark === 'x') ? playerX.changeName(newName) : playerO.changeName(newName);
-        var test = playerX.getName();
-        var test2 = playerO.getName();
-    }));
+const DisplayController = (() => {
+    let _board = document.querySelector('#board');
+    let _names = Array.from(document.querySelectorAll('.player-name'));
+    let _tiles = null;
+    let _restartBtn = document.querySelector('#restart');
+
+    let _createTiles = () => {
+        for(var i = 0; i < 9; i++){
+            var tile = document.createElement('div');
+            tile.classList.add('tile');
+            tile.id = `tile-${i}`;
+            _board.appendChild(tile);
+        } 
+
+        _tiles = Array.from(document.querySelectorAll('.tile'));
+    };
+
+    let _makeNameEditEL = () => {
+        _names.forEach(name => name.addEventListener("input", (e) => {
+            var nameHTML = e.target;
+            var newName = nameHTML.textContent;
+            nameHTML.textContent = newName;
+
+            //e.target.textContent = e.target.textContent;
     
-})();
+            // get if X or O
+            var mark = nameHTML.id.slice(7, 8);
+            (mark === 'x') ? playerX.changeName(newName) : playerO.changeName(newName);
+        }));
+    }
 
-function f () {
+    let _makeRestartEL = () => {
+        let tiles = Array.from(document.querySelectorAll('.tile'));
+        _restartBtn.addEventListener("click", function(){
+            tiles.forEach(tile => {
+                tile.textContent = '';
+                tile.classList.remove('winning-tile');
+            });
     
-}
-
-//add event listeners to tiles
-(function addTileEventListeners(){
-    let tiles = Array.from(document.querySelectorAll('.tile'));
-    tiles.forEach(tile => tile.addEventListener("click", e => {GamePlay.playTile(e)}));
-    
-})();
-
-(function addRestartEventListener(){
-    // clear tiles of classes and text
-    var restartBtn = document.querySelector('#restart');
-    restartBtn.addEventListener("click", function(){
-        var tiles = document.querySelectorAll(".tile");
-        tiles.forEach(tile => {
-            tile.textContent = '';
-            tile.classList.remove('winning-tile');
+            Board.clearBoard();
+            document.querySelector('#results').textContent = '';
         });
+    }
 
-        // clear tile array
-        Board.clearBoard();
+    let initBoard = (() => {
+        _createTiles();
+        _makeNameEditEL();
 
-        // remove any results
-        document.querySelector('#results').textContent = '';
-        // restart player turns
-    });
+        _tiles.forEach(tile => tile.addEventListener("click", e => { GameController.playTile(e); }));
+
+        _makeRestartEL();
+
+    })();
 
 })();
+
+
