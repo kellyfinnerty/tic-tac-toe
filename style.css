@@ -12,7 +12,7 @@ body {
 #game-container{
     display: grid;
     justify-content: center;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto auto auto auto;
     grid-template-columns: auto auto;
 }
 
@@ -21,11 +21,15 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 150px);
     grid-template-rows: repeat(3, 150px);
-    margin-top: 110px;
+    margin-top: 50px;
+}
+
+#results{
+    grid-column: span 2;
 }
 
 .tile{
-    border: 1px white;
+    border: 1px var(--ttt-border);
     text-align: center;
     font-size: 88px;
     padding-top: 15px;
@@ -72,4 +76,8 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+}
+
+.winning-tile {
+    color: pink;
 }
